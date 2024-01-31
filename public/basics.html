@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket.io</title>
+</head>
+<body>
+    <h3>Below is the message from Socket server with socket id: <span id="span"></span></h3>
+    <h1 id="heading" style="color: blue;"></h1>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    // console.log(io);
+    const socket = io('http://localhost:8000')
+    // console.log(socket);
+
+    // Connecting with Browser
+    socket.on('connect', () => {
+        // console.log(socket);
+        console.log(socket.id);
+        document.getElementById('span').textContent = socket.id
+
+        // Sending Message from Client to Server
+        socket.emit('messageFromClient', {data: "Hello from Socket Client"})
+    })
+
+    socket.on('messageFromServer', (data) => {
+        // console.log(data.data);
+        document.getElementById('heading').textContent = data.data
+    })
+
+    socket.io.on('reconnect', (data) => {
+        console.log("Reconnect Event!");
+        console.log(data);
+    })
+</script>
+</html>
